@@ -63,7 +63,7 @@ public class NativeShellPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDe
     private var online = true
     private var pageShown = false
 
-    private var webView: WKWebView? { bridge?.webView }
+    private var shellWebView: WKWebView? { bridge?.webView }
     private var rootController: ShellRootViewController? { bridge?.viewController?.parent as? ShellRootViewController }
 
     // MARK: - Lifecycle
@@ -109,14 +109,14 @@ public class NativeShellPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDe
             self.splashDone = true
             self.videoSplash = nil
             self.loadingObservation = nil
-            self.webView?.evaluateJavaScript("document.documentElement.classList.add('native-splash-done')", completionHandler: nil)
+            self.shellWebView?.evaluateJavaScript("document.documentElement.classList.add('native-splash-done')", completionHandler: nil)
             self.notifyListeners("splashDone", data: [:])
         }
         videoSplash = splash
         rootController?.statusBarOverride = splashUsesLightIcons() ? .lightContent : .darkContent
         splash.show(in: container)
         // The page (or the offline page) has finished loading.
-        loadingObservation = webView?.observe(.isLoading, options: [.new]) { [weak self] webView, _ in
+        loadingObservation = shellWebView?.observe(.isLoading, options: [.new]) { [weak self] webView, _ in
             guard !webView.isLoading, webView.url != nil else { return }
             DispatchQueue.main.async { self?.videoSplash?.markPageReady() }
         }
@@ -136,7 +136,7 @@ public class NativeShellPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDe
 
     /// Adds native-shell.js (from the app's web assets) to every page, before the page's own scripts.
     private func injectBridgeScript() {
-        guard let webView = webView,
+        guard let webView = shellWebView,
               let file = Bundle.main.url(forResource: "native-shell", withExtension: "js", subdirectory: "public"),
               let source = try? String(contentsOf: file, encoding: .utf8) else {
             CAPLog.print("⚡️  NativeShell: public/native-shell.js not found — run `npx cap sync`")
@@ -163,7 +163,7 @@ public class NativeShellPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDe
     }
 
     private func setUpPullToRefresh() {
-        guard let scrollView = webView?.scrollView else { return }
+        guard let scrollView = shellWebView?.scrollView else { return }
         let control = UIRefreshControl()
         if let tint = settings.accentColor { control.tintColor = tint }
         control.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
@@ -173,7 +173,7 @@ public class NativeShellPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDe
     }
 
     private func applyPullToRefresh(_ enabled: Bool) {
-        guard let scrollView = webView?.scrollView, let control = refreshControl else { return }
+        guard let scrollView = shellWebView?.scrollView, let control = refreshControl else { return }
         if enabled {
             if control.superview == nil { scrollView.refreshControl = control }
         } else {
@@ -240,7 +240,7 @@ public class NativeShellPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDe
         observers.append(center.addObserver(forName: .capacitorViewDidAppear, object: nil, queue: .main) { [weak self] _ in
             self?.markReady()
         })
-        urlObservation = webView?.observe(\.url, options: [.new]) { [weak self] webView, _ in
+        urlObservation = shellWebView?.observe(\.url, options: [.new]) { [weak self] webView, _ in
             DispatchQueue.main.async { self?.syncSelectedTab(webView.url) }
         }
     }
@@ -291,7 +291,7 @@ public class NativeShellPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDe
     }
 
     private func navigate(to url: URL) {
-        guard isReady, let webView = webView else {
+        guard isReady, let webView = shellWebView else {
             pendingURL = url
             return
         }
@@ -299,7 +299,7 @@ public class NativeShellPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDe
     }
 
     private func reloadCurrent() {
-        guard let webView = webView else { return }
+        guard let webView = shellWebView else { return }
         // Bundled pages live on the phone, so they can always reload.
         let bundled = webView.url?.host == bridge?.config.localURL.host
         if !bundled, blockWhileOffline(nil) { return }
@@ -380,7 +380,7 @@ public class NativeShellPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDe
             } else {
                 self.applyPullToRefresh(self.refreshEnabled)
             }
-            self.syncSelectedTab(self.webView?.url)
+            self.syncSelectedTab(self.shellWebView?.url)
             self.videoSplash?.markPageReady()
             call.resolve(["splashDone": self.splashDone])
         }
