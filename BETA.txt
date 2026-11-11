@@ -3,7 +3,7 @@ SHINE Beta
 Separate test copy of Clients/WCS/Shine Webview.
 URL: https://testing.yourdeveloper.co.uk
 App name: SHINE Beta
-Android application ID / iOS bundle ID: uk.co.yourdeveloper.shine.beta
+Android application ID / iOS bundle ID: uk.co.yourdeveloper.shinebeta
 Deep link scheme: shinecarebeta
 
 The original app has not been modified. This copy has no app.config.local.json localhost override.

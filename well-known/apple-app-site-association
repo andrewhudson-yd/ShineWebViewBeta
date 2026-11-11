@@ -3,7 +3,7 @@
     "details": [
       {
         "appIDs": [
-          "YOUR_TEAM_ID.uk.co.yourdeveloper.shine.beta"
+          "YOUR_TEAM_ID.uk.co.yourdeveloper.shinebeta"
         ],
         "components": [
           {
@@ -15,7 +15,7 @@
   },
   "webcredentials": {
     "apps": [
-      "YOUR_TEAM_ID.uk.co.yourdeveloper.shine.beta"
+      "YOUR_TEAM_ID.uk.co.yourdeveloper.shinebeta"
     ]
   }
 }
