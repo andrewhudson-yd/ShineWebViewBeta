@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>App feature test</title>
+  <style>
+    :root { --bg:#f5f6f8; --card:#fff; --fg:#111827; --muted:#6b7280; --accent:#2563eb; --line:#e5e7eb; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#0b0f17; --card:#151b26; --fg:#f3f4f6; --muted:#9ca3af; --line:#263042; } }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      padding: calc(16px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom)); -webkit-tap-highlight-color: transparent; }
+    h1 { font-size:24px; margin:4px 0 2px; }
+    .sub { color:var(--muted); margin:0 0 16px; }
+    section { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:14px; }
+    h2 { font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:0 0 10px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:8px; }
+    button, .btn { appearance:none; border:1px solid var(--line); background:var(--bg); color:var(--fg); border-radius:10px;
+      padding:11px 10px; font:inherit; font-weight:500; text-align:center; text-decoration:none; display:block; }
+    button:active, .btn:active { transform:scale(.97); }
+    button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+    input[type=text] { width:100%; padding:10px; border-radius:10px; border:1px solid var(--line); background:var(--bg); color:var(--fg); font:inherit; margin-bottom:8px; }
+    video { width:100%; border-radius:10px; background:#000; display:none; margin-top:8px; }
+    #log { font:12px/1.5 ui-monospace,Menlo,monospace; white-space:pre-wrap; word-break:break-word; max-height:260px; overflow:auto; margin:0; }
+    .todo { display:flex; gap:10px; align-items:center; padding:10px 2px; border-bottom:1px solid var(--line); }
+    .todo:last-child { border-bottom:0; }
+    .todo input { width:20px; height:20px; accent-color:var(--accent); }
+    .todo:has(input:checked) { color:var(--muted); text-decoration:line-through; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:99px; font-size:12px; background:var(--bg); border:1px solid var(--line); }
+  </style>
+</head>
+<body>
+  <h1>Feature test</h1>
+  <p class="sub">Running in: <span class="badge" id="env">browser</span></p>
+
+  <section>
+    <h2>Haptics</h2>
+    <div class="grid">
+      <button data-haptic="light">light</button>
+      <button data-haptic="medium">medium</button>
+      <button data-haptic="heavy">heavy</button>
+      <button data-haptic="soft">soft</button>
+      <button data-haptic="rigid">rigid</button>
+      <button data-haptic="selection">selection</button>
+      <button data-haptic="success">success</button>
+      <button data-haptic="warning">warning</button>
+      <button data-haptic="error">error</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Push notifications</h2>
+    <input type="text" id="userId" placeholder="Your user id (external id)">
+    <div class="grid">
+      <button class="primary" onclick="run(() => NativeApp.notifications.requestPermission())">Ask permission</button>
+      <button onclick="run(() => NativeApp.notifications.getState())">Get state</button>
+      <button onclick="run(() => NativeApp.notifications.login(document.getElementById('userId').value || 'demo-user'))">Login</button>
+      <button onclick="run(() => NativeApp.notifications.logout())">Logout</button>
+      <button onclick="run(() => NativeApp.notifications.addTags({ plan: 'pro', demo: 1 }))">Add tags</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Icon badge — to-dos</h2>
+    <p class="sub" style="margin:0 0 10px">Tick items off, then close the app and look at its icon.</p>
+    <div id="todos">
+      <label class="todo"><input type="checkbox"> Reply to Sarah's email</label>
+      <label class="todo"><input type="checkbox"> Approve the March invoice</label>
+      <label class="todo"><input type="checkbox"> Book the team meeting</label>
+    </div>
+    <div class="grid" style="margin-top:10px">
+      <button onclick="run(() => NativeApp.badge.get())">Current badge</button>
+      <button onclick="run(() => NativeApp.badge.clear())">Clear badge</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Camera, microphone &amp; location</h2>
+    <div class="grid">
+      <button onclick="run(() => NativeApp.permissions.check())">Check all</button>
+      <button onclick="run(() => NativeApp.permissions.request(['camera', 'microphone']))">Ask cam + mic</button>
+      <button onclick="startCamera()">Live camera</button>
+      <button onclick="recordAudio()">Record 3s audio</button>
+      <button onclick="getLocation()">Location</button>
+      <button onclick="run(() => NativeApp.permissions.openSettings())">App settings</button>
+      <label class="btn">Photo upload<input type="file" accept="image/*" hidden onchange="log('file', this.files[0] && this.files[0].name)"></label>
+      <label class="btn">Take photo<input type="file" accept="image/*" capture="environment" hidden onchange="log('photo', this.files[0] && this.files[0].name)"></label>
+    </div>
+    <video id="video" autoplay playsinline muted></video>
+  </section>
+
+  <section>
+    <h2>Links &amp; files</h2>
+    <div class="grid">
+      <a class="btn" href="https://capacitorjs.com">External link</a>
+      <a class="btn" href="https://capacitorjs.com" target="_blank">target=_blank</a>
+      <button onclick="run(() => NativeApp.openUrl('https://capacitorjs.com', { mode: 'browser' }))">System browser</button>
+      <a class="btn" href="tel:+441234567890">tel:</a>
+      <a class="btn" href="mailto:hello@example.com">mailto:</a>
+      <a class="btn" href="https://maps.apple.com/?q=London">Maps</a>
+      <button onclick="downloadText()">Download .txt</button>
+      <button onclick="run(() => NativeApp.share({ title: document.title, url: location.href }))">Share</button>
+      <button onclick="run(() => NativeApp.copy('Copied from the app'))">Copy</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>App</h2>
+    <div class="grid">
+      <button onclick="run(() => NativeApp.device.info())">Device info</button>
+      <button onclick="run(() => NativeApp.network.status())">Network</button>
+      <button onclick="run(() => NativeApp.statusBar.setStyle('light'))">Light status bar</button>
+      <button onclick="run(() => NativeApp.statusBar.setStyle('dark'))">Dark status bar</button>
+      <button onclick="run(() => NativeApp.keepAwake(true))">Keep awake</button>
+      <button onclick="run(() => NativeApp.pullToRefresh(false))">Disable pull-refresh</button>
+      <button onclick="run(() => NativeApp.tabs.setBadge(1, '2'))">Tab badge</button>
+      <button onclick="run(() => NativeApp.reload())">Reload</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Log</h2>
+    <pre id="log"></pre>
+  </section>
+
+<script>
+  function log(label, value) {
+    var el = document.getElementById('log');
+    var text = typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value);
+    el.textContent = new Date().toLocaleTimeString() + '  ' + label + (value === undefined ? '' : ': ' + text) + '\n' + el.textContent;
+  }
+  function run(fn) {
+    if (!window.NativeApp) return log('Not running inside the app');
+    Promise.resolve().then(fn).then(function (r) { log('ok', r === undefined ? 'done' : r); }, function (e) { log('error', e.message || e); });
+  }
+  function startCamera() {
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false }).then(function (stream) {
+      var v = document.getElementById('video'); v.srcObject = stream; v.style.display = 'block'; log('camera', 'streaming');
+    }, function (e) { log('camera error', e.name + ': ' + e.message); });
+  }
+  function recordAudio() {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+      var rec = new MediaRecorder(stream), chunks = [];
+      rec.ondataavailable = function (e) { chunks.push(e.data); };
+      rec.onstop = function () { stream.getTracks().forEach(function (t) { t.stop(); }); log('recorded', new Blob(chunks).size + ' bytes'); };
+      rec.start(); log('recording', '3s…'); setTimeout(function () { rec.stop(); }, 3000);
+    }, function (e) { log('mic error', e.name + ': ' + e.message); });
+  }
+  function getLocation() {
+    navigator.geolocation.getCurrentPosition(function (p) { log('location', { lat: p.coords.latitude, lng: p.coords.longitude }); },
+      function (e) { log('location error', e.message); }, { enableHighAccuracy: true, timeout: 10000 });
+  }
+  function downloadText() {
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['Hello from the app at ' + new Date().toISOString()], { type: 'text/plain' }));
+    a.download = 'hello.txt';
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  // To-dos → icon badge. Remaining items are the badge number.
+  function updateTodoBadge() {
+    var left = document.querySelectorAll('#todos input:not(:checked)').length;
+    if (!window.NativeApp) return log('to-dos left', left);
+    NativeApp.badge.set(left, { text: 'You have {count} to-dos left' }).then(function (r) {
+      if (r.applied) return log('badge', left);
+      log('badge', 'needs notification permission — asking…');
+      NativeApp.notifications.requestPermission().then(function () { return NativeApp.badge.set(left); }).then(function (r2) { log('badge', r2); });
+    });
+  }
+  document.getElementById('todos').addEventListener('change', function (e) {
+    if (window.NativeApp) NativeApp.haptic(e.target.checked ? 'success' : 'light');
+    updateTodoBadge();
+  });
+
+  // Works with or without the app: NativeApp only exists inside it.
+  if (window.NativeApp) NativeApp.ready(function () {
+    document.getElementById('env').textContent = 'app · ' + NativeApp.platform + ' ' + NativeApp.version;
+    NativeApp.notifications.onClick(function (n) { log('push clicked', n); });
+    NativeApp.notifications.onReceived(function (n) { log('push received', n); });
+    NativeApp.on('resume', function () { log('app resumed'); });
+    updateTodoBadge();
+  });
+</script>
+</body>
+</html>

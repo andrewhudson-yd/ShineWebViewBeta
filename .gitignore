@@ -1,0 +1,23 @@
+node_modules/
+.DS_Store
+*.log
+
+# Native build output
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.idea/
+android/app/release/
+*.keystore
+*.jks
+ios/App/build/
+ios/App/DerivedData/
+ios/App/App.xcodeproj/xcuserdata/
+ios/App/App.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Local test overrides
+app.config.local.json
+
+# Local plugin build output
+plugins/*/android/build/

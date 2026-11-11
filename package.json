@@ -1,0 +1,34 @@
+{
+  "name": "dl-webview-shell",
+  "version": "1.0.0",
+  "scripts": {
+    "configure": "node scripts/configure.mjs",
+    "sync": "node scripts/configure.mjs && cap sync",
+    "ios": "npm run sync && cap open ios",
+    "android": "npm run sync && cap open android",
+    "run:ios": "npm run sync && cap run ios",
+    "run:android": "npm run sync && cap run android",
+    "assets": "npx @capacitor/assets generate --iconBackgroundColor \"#ffffff\" --splashBackgroundColor \"#ffffff\"",
+    "brand": "node scripts/brand-studio.mjs"
+  },
+  "description": "Native iOS + Android shell for web apps (Capacitor): haptics, OneSignal push, permissions, tabs, deep links.",
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/browser": "^8.0.5",
+    "@capacitor/clipboard": "^8.0.1",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/device": "^8.0.3",
+    "@capacitor/ios": "^8.5.3",
+    "@capacitor/network": "^8.0.1",
+    "@capacitor/preferences": "^8.0.1",
+    "@capacitor/share": "^8.0.3",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.4",
+    "capacitor-native-shell": "file:plugins/native-shell"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.3"
+  },
+  "private": true
+}

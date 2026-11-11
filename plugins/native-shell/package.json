@@ -1,0 +1,21 @@
+{
+  "name": "capacitor-native-shell",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Native shell for the webview app: haptics, OneSignal push, permissions, pull-to-refresh, tab bar, link handling and downloads.",
+  "files": [
+    "android/src/main/",
+    "android/build.gradle",
+    "ios/Sources",
+    "Package.swift",
+    "CapacitorNativeShell.podspec"
+  ],
+  "keywords": ["capacitor", "plugin", "native"],
+  "capacitor": {
+    "ios": { "src": "ios" },
+    "android": { "src": "android" }
+  },
+  "peerDependencies": {
+    "@capacitor/core": ">=8.0.0"
+  }
+}

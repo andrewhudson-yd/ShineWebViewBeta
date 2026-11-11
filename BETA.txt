@@ -1,0 +1,15 @@
+SHINE Beta
+
+Separate test copy of Clients/WCS/Shine Webview.
+URL: https://testing.yourdeveloper.co.uk
+App name: SHINE Beta
+Android application ID / iOS bundle ID: uk.co.yourdeveloper.shine.beta
+Deep link scheme: shinecarebeta
+
+The original app has not been modified. This copy has no app.config.local.json localhost override.
+Launcher icons include an amber BETA badge at bottom right. Brand Studio preserves the badge on regeneration through brand.icon.beta.
+
+Run npm run sync after config changes.
+Android debug build: cd android, then .\gradlew.bat assembleDebug
+Output: android/app/build/outputs/apk/debug/app-debug.apk
+Building/signing iOS requires Xcode on a Mac.

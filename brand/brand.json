@@ -1,0 +1,23 @@
+{
+  "_comment": "The app's brand, in one place. Change it, then run `npm run brand` (generates every icon, splash and the intro video) and `npm run sync`. resources/splash.mp4 is the SHINE robot intro; don't regenerate the video unless you want to replace it.",
+  "name": "SHINE Beta",
+  "tagline": "",
+  "colors": {
+    "primary": "#702283",
+    "primaryLight": "#713e99",
+    "dark": "#111827",
+    "light": "#ffffff"
+  },
+  "mark": "mark.svg",
+  "icon": {
+    "background": "light",
+    "markScale": 0.9,
+    "beta": true
+  },
+  "splash": {
+    "background": "light"
+  },
+  "wordmark": {
+    "style": "spaced"
+  }
+}

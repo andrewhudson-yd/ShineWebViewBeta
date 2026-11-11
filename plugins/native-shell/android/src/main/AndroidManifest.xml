@@ -1,0 +1,49 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Web features: getUserMedia (camera / mic), <input type="file" capture>, geolocation -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- Photo / video picking for uploads on Android 13+ -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+
+    <!-- Haptics, push, keep-awake -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Don't hide the app from devices without these -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+
+    <!-- Let the app check which apps can handle tel:, mailto:, etc. -->
+    <queries>
+        <intent><action android:name="android.intent.action.VIEW" /><data android:scheme="https" /></intent>
+        <intent><action android:name="android.intent.action.DIAL" /></intent>
+        <intent><action android:name="android.intent.action.SENDTO" /><data android:scheme="mailto" /></intent>
+        <intent><action android:name="android.support.customtabs.action.CustomTabsService" /></intent>
+        <!-- Native dictation (NativeApp.speech) -->
+        <intent><action android:name="android.speech.RecognitionService" /></intent>
+    </queries>
+
+    <application>
+        <!-- The app opens notification URLs itself (inside the web view) -->
+        <meta-data android:name="com.onesignal.suppressLaunchURLs" android:value="true" />
+        <!-- The icon badge count is set by the app (NativeApp.badge / {"badge": n} in a push), not OneSignal -->
+        <meta-data android:name="com.onesignal.BadgeCount" android:value="DISABLE" />
+        <meta-data
+            android:name="com.onesignal.NotificationServiceExtension"
+            android:value="uk.co.dotlogics.nativeshell.ShellNotificationExtension" />
+    </application>
+</manifest>

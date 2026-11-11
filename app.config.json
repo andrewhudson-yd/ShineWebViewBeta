@@ -1,0 +1,70 @@
+{
+  "appId": "uk.co.yourdeveloper.shine.beta",
+  "appName": "SHINE Beta",
+  "version": "1.0.0",
+  "build": 1,
+  "startUrl": "https://testing.yourdeveloper.co.uk",
+  "internalHosts": [
+    "testing.yourdeveloper.co.uk"
+  ],
+  "trustedOrigins": [],
+  "externalLinks": "inApp",
+  "userAgentSuffix": "ShineAppBeta",
+  "theme": {
+    "backgroundColor": "#f9f8ee",
+    "accentColor": "#702283",
+    "statusBarStyle": "dark",
+    "safeArea": "app"
+  },
+  "splash": {
+    "video": "resources/splash.mp4",
+    "backgroundColor": "#ffffff",
+    "statusBarStyle": "dark",
+    "play": "everyLaunch",
+    "skippable": true,
+    "minDuration": 2.5,
+    "maxWait": 8
+  },
+  "offline": {
+    "mode": "banner",
+    "message": "You're offline. We'll reconnect automatically.",
+    "queuedMessage": "You're offline. That will open when you're back.",
+    "onlineMessage": "Back online"
+  },
+  "haptics": {
+    "intensity": "normal"
+  },
+  "features": {
+    "pullToRefresh": true,
+    "autoHaptics": false,
+    "zoom": false,
+    "linkPreview": false,
+    "debug": false
+  },
+  "notifications": {
+    "oneSignalAppId": "",
+    "promptOnLaunch": false
+  },
+  "badge": {
+    "androidText": "You have {count} things to check in SHINE"
+  },
+  "orientation": "portrait",
+  "deepLinks": {
+    "scheme": "shinecarebeta",
+    "handledBy": "app",
+    "hosts": [
+      "testing.yourdeveloper.co.uk"
+    ],
+    "appleTeamId": "",
+    "androidSha256": []
+  },
+  "tabs": [],
+  "permissions": {
+    "camera": "Allows you to take photos, scan codes and join video calls in the app.",
+    "microphone": "Lets you speak care notes instead of typing, and record audio messages.",
+    "photoLibrary": "Allows you to choose photos and videos to upload.",
+    "photoLibraryAdd": "Allows the app to save images to your photo library.",
+    "location": "Allows the app to show content and services near you.",
+    "motion": "Allows the app to respond to how you move your device."
+  }
+}
