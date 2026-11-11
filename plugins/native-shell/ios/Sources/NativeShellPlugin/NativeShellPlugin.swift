@@ -116,7 +116,7 @@ public class NativeShellPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDe
         rootController?.statusBarOverride = splashUsesLightIcons() ? .lightContent : .darkContent
         splash.show(in: container)
         // The page (or the offline page) has finished loading.
-        loadingObservation = shellWebView?.observe(.isLoading, options: [.new]) { [weak self] webView, _ in
+        loadingObservation = shellWebView?.observe(\.isLoading, options: [.new]) { [weak self] webView, _ in
             guard !webView.isLoading, webView.url != nil else { return }
             DispatchQueue.main.async { self?.videoSplash?.markPageReady() }
         }
